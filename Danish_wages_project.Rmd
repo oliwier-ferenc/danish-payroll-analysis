@@ -1,0 +1,115 @@
+---
+title: "Danish Payroll Expenditure & Sectoral Growth Analysis"
+author: "by: Oliwier Ferenc"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Executive Summary
+
+This document analyzes sectoral payroll expenditure and wage growth dynamics across the Danish economy using real-time administrative data retrieved from **Danmarks Statistik** via API. By integrating industry-level hourly earnings data (Table `LONS40`) with total employment statistics (Table `RAS300`), the analysis models aggregate annual payroll spend from 2013 to 2024 across primary, secondary, and tertiary economic sectors.
+
+```{r danish-payroll-pipeline, echo = TRUE, message = FALSE, warning = FALSE, fig.width = 14, fig.height = 8}
+# Load Libraries
+library(danstat)
+library(tidyverse)
+library(knitr)
+
+# --- DATA PULL: Table LONS40 (Hourly Wages) ---------------------------
+wage_data <- get_data(
+  table_id = "LONS40",
+  variables = list(
+    list(code = "BRANCHE07", values = NA),
+    list(code = "SEKTOR", values = "1000"),
+    list(code = "AFLOEN", values = "TIFA"),
+    list(code = "LONGRP", values = "LTOT"),
+    list(code = "LØNMÅL", values = "FORINKL"),
+    list(code = "KØN", values = "MOK"),
+    list(code = "Tid", values = NA)
+  )
+)
+
+wage_clean <- wage_data %>% 
+  subset(select = c(BRANCHE07, TID, INDHOLD)) %>% 
+  rename(
+    hourly_wage = INDHOLD,
+    industry = BRANCHE07,
+    year = TID
+  ) 
+
+# --- DATA PULL: Table RAS300 (Employment Numbers) --------------------
+employed_data <- get_data(
+  table_id = "RAS300",
+  variables = list(
+    list(code = "BRANCHE07", values = NA),
+    list(code = "Tid", values = NA)
+  )
+)
+
+employed_clean <- employed_data %>%
+  filter(TID >= 2013) %>% 
+  rename(
+     num_employees = INDHOLD,
+     industry = BRANCHE07,
+     year = TID
+  ) 
+
+# --- DATA TRANSFORMATION & CALCULATIONS -------------------------------
+payroll <- inner_join(wage_clean, employed_clean, by = c("industry", "year")) %>%
+  mutate(
+    hourly_wage = as.numeric(hourly_wage) / 100, # Scaled to convert into true DKK/hr
+    num_employees = as.numeric(num_employees),
+    total_payroll_dkk = hourly_wage * num_employees * 1600 # 1,600 standard working hours/year
+  )
+
+payroll_summary <- payroll %>%
+  arrange(industry, year) %>%
+  group_by(industry) %>%
+  mutate(
+    log_payroll = log(total_payroll_dkk),
+    pct_growth = (total_payroll_dkk - lag(total_payroll_dkk)) / lag(total_payroll_dkk) * 100
+  )
+
+# --- SUMMARY TABLES ---------------------------------------------------
+top_spenders <- payroll_summary %>%
+  filter(!industry %in% c("TOT Industry, total", "TOT", "10000", "000000", "I alt")) %>%
+  filter(year == max(year)) %>%
+  arrange(desc(total_payroll_dkk)) %>%
+  head(5)
+
+fastest_growing <- payroll_summary %>%
+  filter(!industry %in% c("TOT Industry, total", "TOT", "10000", "000000", "I alt")) %>%
+  filter(!is.na(pct_growth)) %>%
+  group_by(industry) %>%
+  summarise(avg_annual_growth = mean(pct_growth)) %>%
+  arrange(desc(avg_annual_growth)) %>%
+  head(5)
+
+kable(top_spenders, caption = "Top 5 Sectors by Total Payroll Spend (DKK)")
+kable(fastest_growing, caption = "Top 5 Sectors by Average Annual Growth Rate (%)")
+
+# --- VISUALIZATION ----------------------------------------------------
+payroll_summary %>% 
+  filter(!industry %in% c("TOT Industry, total", "TOT", "10000", "000000", "I alt")) %>% 
+  mutate(year = as.numeric(as.character(year))) %>%
+  ggplot(aes(x = as.numeric(year), y = total_payroll_dkk / 1e9, color = industry)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 2) +
+  scale_x_continuous(
+    breaks = c(seq(2013, 2023, by = 2), 2024),
+    limits = c(2013, 2024)
+    ) + # Clean whole-year ticks
+  scale_y_continuous(labels = scales::label_dollar(prefix = "DKK ", suffix = "B")) +
+  labs(
+    title = "Annual Payroll Expenditure by Industry (Denmark)",
+    subtitle = "Excludes macro total to highlight sector-level dynamics",
+    x = "Year",
+    y = "Total Payroll (Billions DKK)",
+    color = "Industry Code"
+  ) +
+  theme_minimal()
+
+
+
+
+

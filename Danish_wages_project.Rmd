@@ -1,4 +1,4 @@
----
+cd---
 title: "Danish Payroll Expenditure & Sectoral Growth Analysis"
 author: "by: Oliwier Ferenc"
 date: "`r Sys.Date()`"
@@ -7,7 +7,28 @@ output: html_document
 
 # Executive Summary
 
-This document analyzes sectoral payroll expenditure and wage growth dynamics across the Danish economy using real-time administrative data retrieved from **Danmarks Statistik** via API. By integrating industry-level hourly earnings data (Table `LONS40`) with total employment statistics (Table `RAS300`), the analysis models aggregate annual payroll spend from 2013 to 2024 across primary, secondary, and tertiary economic sectors.
+This analysis examines payroll expenditure and wage growth dynamics 
+across the Danish economy from 2013 to 2024, using real-time 
+administrative data retrieved from **Danmarks Statistik** via API. Two findings stand out.
+
+Manufacturing, while often framed as a declining sector, is Denmark's 
+fastest-growing industry by payroll expenditure at 7.82% annual growth, 
+outpacing both Information & Communication (3.38%) and Financial Services 
+(6.93%). With hourly wages of 417 DKK, third highest across all 
+industries, this reflects structural upgrading toward advanced, 
+high-value production rather than traditional decline.
+
+Second, the Information & Communication sector pays the second-highest 
+hourly wage (457 DKK/hr) but shows the slowest payroll growth among 
+high-wage industries. In a period of significant digitalization 
+investment, this suggests Danish tech employment is characterized by 
+stable, highly-compensated headcount rather than rapid expansion — a 
+meaningful distinction for workforce planning.
+
+Public administration remains the largest employer by a substantial 
+margin (966,716 employees), with total payroll of 558B DKK — nearly 40% 
+above the next largest sector.
+
 
 ```{r danish-payroll-pipeline, echo = TRUE, message = FALSE, warning = FALSE, fig.width = 14, fig.height = 8}
 # Load Libraries
@@ -87,6 +108,19 @@ fastest_growing <- payroll_summary %>%
 
 kable(top_spenders, caption = "Top 5 Sectors by Total Payroll Spend (DKK)")
 kable(fastest_growing, caption = "Top 5 Sectors by Average Annual Growth Rate (%)")
+
+# --- INDUSTRY COMPARISON TABLE ----------------------------------------
+industry_comparison <- payroll_summary %>%
+  filter(!industry %in% c("TOT Industry, total", "TOT", "10000", "000000", "I alt")) %>%
+  filter(year == max(year)) %>%
+  select(industry, hourly_wage, num_employees, total_payroll_dkk, pct_growth) %>%
+  arrange(desc(hourly_wage))
+
+kable(industry_comparison, 
+      caption = "All Industries: Hourly Wage, Employment & Payroll Growth (2024)",
+      col.names = c("Industry", "Hourly Wage (DKK)", "Employees", 
+                    "Total Payroll (DKK)", "Annual Growth (%)"),
+      digits = 2)
 
 # --- VISUALIZATION ----------------------------------------------------
 payroll_summary %>% 

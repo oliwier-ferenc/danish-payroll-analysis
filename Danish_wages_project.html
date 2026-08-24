@@ -9,11 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="by: Oliwier Ferenc" />
 
-<meta name="date" content="2026-08-24" />
 
-<title>Danish Payroll Expenditure &amp; Sectoral Growth Analysis</title>
+<title>Danish_wages_project.knit</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -350,24 +348,34 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Danish Payroll Expenditure &amp; Sectoral
-Growth Analysis</h1>
-<h4 class="author">by: Oliwier Ferenc</h4>
-<h4 class="date">2026-08-24</h4>
 
 </div>
 
 
+<p>cd— title: “Danish Payroll Expenditure &amp; Sectoral Growth
+Analysis” author: “by: Oliwier Ferenc” date: “2026-08-24” output:
+html_document —</p>
 <div id="executive-summary" class="section level1">
 <h1>Executive Summary</h1>
-<p>This document analyzes sectoral payroll expenditure and wage growth
-dynamics across the Danish economy using real-time administrative data
-retrieved from <strong>Danmarks Statistik</strong> via API. By
-integrating industry-level hourly earnings data (Table
-<code>LONS40</code>) with total employment statistics (Table
-<code>RAS300</code>), the analysis models aggregate annual payroll spend
-from 2013 to 2024 across primary, secondary, and tertiary economic
-sectors.</p>
+<p>This analysis examines payroll expenditure and wage growth dynamics
+across the Danish economy from 2013 to 2024, using real-time
+administrative data retrieved from <strong>Danmarks Statistik</strong>
+via API. Two findings stand out.</p>
+<p>Manufacturing, while often framed as a declining sector, is Denmark’s
+fastest-growing industry by payroll expenditure at 7.82% annual growth,
+outpacing both Information &amp; Communication (3.38%) and Financial
+Services (6.93%). With hourly wages of 417 DKK, third highest across all
+industries, this reflects structural upgrading toward advanced,
+high-value production rather than traditional decline.</p>
+<p>Second, the Information &amp; Communication sector pays the
+second-highest hourly wage (457 DKK/hr) but shows the slowest payroll
+growth among high-wage industries. In a period of significant
+digitalization investment, this suggests Danish tech employment is
+characterized by stable, highly-compensated headcount rather than rapid
+expansion — a meaningful distinction for workforce planning.</p>
+<p>Public administration remains the largest employer by a substantial
+margin (966,716 employees), with total payroll of 558B DKK — nearly 40%
+above the next largest sector.</p>
 <pre class="r"><code># Load Libraries
 library(danstat)
 library(tidyverse)
@@ -549,6 +557,111 @@ services</td>
 <tr class="odd">
 <td align="left">6 Financial and insurance</td>
 <td align="right">4.006459</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># --- INDUSTRY COMPARISON TABLE ----------------------------------------
+industry_comparison &lt;- payroll_summary %&gt;%
+  filter(!industry %in% c(&quot;TOT Industry, total&quot;, &quot;TOT&quot;, &quot;10000&quot;, &quot;000000&quot;, &quot;I alt&quot;)) %&gt;%
+  filter(year == max(year)) %&gt;%
+  select(industry, hourly_wage, num_employees, total_payroll_dkk, pct_growth) %&gt;%
+  arrange(desc(hourly_wage))
+
+kable(industry_comparison, 
+      caption = &quot;All Industries: Hourly Wage, Employment &amp; Payroll Growth (2024)&quot;,
+      col.names = c(&quot;Industry&quot;, &quot;Hourly Wage (DKK)&quot;, &quot;Employees&quot;, 
+                    &quot;Total Payroll (DKK)&quot;, &quot;Annual Growth (%)&quot;),
+      digits = 2)</code></pre>
+<table>
+<caption>All Industries: Hourly Wage, Employment &amp; Payroll Growth
+(2024)</caption>
+<colgroup>
+<col width="47%" />
+<col width="14%" />
+<col width="7%" />
+<col width="15%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Industry</th>
+<th align="right">Hourly Wage (DKK)</th>
+<th align="right">Employees</th>
+<th align="right">Total Payroll (DKK)</th>
+<th align="right">Annual Growth (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">6 Financial and insurance</td>
+<td align="right">539.04</td>
+<td align="right">90420</td>
+<td align="right">77983994880</td>
+<td align="right">6.93</td>
+</tr>
+<tr class="even">
+<td align="left">5 Information and communication</td>
+<td align="right">457.02</td>
+<td align="right">129007</td>
+<td align="right">94334046624</td>
+<td align="right">3.38</td>
+</tr>
+<tr class="odd">
+<td align="left">2 Manufacturing, mining and quarrying, and utility
+services</td>
+<td align="right">417.10</td>
+<td align="right">369716</td>
+<td align="right">246733669760</td>
+<td align="right">7.82</td>
+</tr>
+<tr class="even">
+<td align="left">8 Other business services</td>
+<td align="right">390.67</td>
+<td align="right">377824</td>
+<td align="right">236167203328</td>
+<td align="right">6.06</td>
+</tr>
+<tr class="odd">
+<td align="left">7 Real estate</td>
+<td align="right">371.30</td>
+<td align="right">51153</td>
+<td align="right">30388974240</td>
+<td align="right">6.68</td>
+</tr>
+<tr class="even">
+<td align="left">9 Public administration, education and health</td>
+<td align="right">360.75</td>
+<td align="right">966716</td>
+<td align="right">557988475200</td>
+<td align="right">5.48</td>
+</tr>
+<tr class="odd">
+<td align="left">3 Construction</td>
+<td align="right">360.18</td>
+<td align="right">192756</td>
+<td align="right">111082969728</td>
+<td align="right">6.15</td>
+</tr>
+<tr class="even">
+<td align="left">1 Agriculture, forestry and fishing</td>
+<td align="right">359.61</td>
+<td align="right">66344</td>
+<td align="right">38172745344</td>
+<td align="right">2.32</td>
+</tr>
+<tr class="odd">
+<td align="left">10 Arts, entertainment and recration activities</td>
+<td align="right">358.57</td>
+<td align="right">146058</td>
+<td align="right">83795227296</td>
+<td align="right">6.26</td>
+</tr>
+<tr class="even">
+<td align="left">4 Trade and transport etc.</td>
+<td align="right">334.45</td>
+<td align="right">743181</td>
+<td align="right">397691016720</td>
+<td align="right">4.89</td>
 </tr>
 </tbody>
 </table>

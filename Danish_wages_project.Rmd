@@ -2,7 +2,10 @@
 title: "Danish Payroll Expenditure & Sectoral Growth Analysis"
 author: "by: Oliwier Ferenc"
 date: "`r Sys.Date()`"
-output: html_document
+output: 
+  html_document:
+    self_contained: true
+knit: (function(input, ...) rmarkdown::render(input, output_file = "index.html"))
 ---
 
 # Executive Summary

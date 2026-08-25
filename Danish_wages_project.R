@@ -126,8 +126,10 @@ payroll_summary %>%
   ) +
   theme_minimal()
 
-payroll_summary %>%
+industry_comparison <- payroll_summary %>%
   filter(!industry %in% c("TOT Industry, total", "TOT", "10000", "000000", "I alt")) %>%
   filter(year == max(year)) %>%
   select(industry, hourly_wage, num_employees, total_payroll_dkk, pct_growth) %>%
   arrange(desc(hourly_wage))
+
+

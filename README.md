@@ -8,13 +8,9 @@ data pulled directly from Danmarks Statistik via API.
 
 Integrates industry-level hourly earnings (LONS40) with total employment 
 statistics (RAS300) to model aggregate annual payroll spend across the 
-Danish economy from 2013 to 2024. The analysis surfaces two 
-counterintuitive findings about where Danish labor value is actually 
-concentrating.
+Danish economy from 2013 to 2024. This analysis tests conventional economic intuitions, revealing four core insights.
 
 ## Key Findings & Sector Positioning
-
-This analysis tests conventional economic intuitions against Danmarks Statistik data (2013-2024), revealing four core insights:
 
 - **Advanced Manufacturing Outpaces Digital Expectations:** Manufacturing has emerged as Denmark's fastest-growing payroll sector (7.82% annual growth in 2024, expanding from 150B to 247B DKK since 2013). It is the only sector combining high wages (417 DKK/hr), momentum, and large-scale employment (369,716 employees).
 

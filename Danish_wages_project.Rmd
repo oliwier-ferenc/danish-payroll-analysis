@@ -12,7 +12,7 @@ knit: (function(input, ...) rmarkdown::render(input, output_file = "index.html")
 
 This analysis examines payroll expenditure and wage growth dynamics 
 across the Danish economy from 2013 to 2024, using real-time 
-administrative data retrieved from **Danmarks Statistik** via API. Two findings stand out.
+administrative data retrieved from **Danmarks Statistik** via API.
 
 Manufacturing, while often framed as a declining sector, is Denmark's 
 fastest-growing industry by payroll expenditure at 7.82% annual growth, 
@@ -31,6 +31,7 @@ meaningful distinction for workforce planning.
 Public administration remains the largest employer by a substantial 
 margin (966,716 employees), with total payroll of 558B DKK — nearly 40% 
 above the next largest sector.
+
 
 
 ```{r danish-payroll-pipeline, echo = TRUE, message = FALSE, warning = FALSE, fig.width = 14, fig.height = 8}

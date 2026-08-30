@@ -12,23 +12,20 @@ Danish economy from 2013 to 2024. The analysis surfaces two
 counterintuitive findings about where Danish labor value is actually 
 concentrating.
 
-## Key Findings
+## Key Findings & Sector Positioning
 
-- **Manufacturing is Denmark's fastest-growing payroll sector** at 7.82% 
-  annual growth — outpacing Information & Communication (3.38%), 
-  Financial Services (6.93%), and Business Services (6.06%). This 
-  reflects structural upgrading in advanced manufacturing rather than 
-  decline.
+This analysis tests conventional economic intuitions against Danmarks Statistik data (2013-2024), revealing four core insights:
 
-- **The digital sector underperforms expectations**: Information & 
-  Communication pays the second-highest hourly wage (457 DKK/hr) but 
-  shows the slowest payroll growth among high-wage industries — 
-  suggesting stable, highly-paid headcount rather than rapid expansion.
+- **Advanced Manufacturing Outpaces Digital Expectations:** Manufacturing has emerged as Denmark's fastest-growing payroll sector (7.82% annual growth in 2024, expanding from 150B to 247B DKK since 2013). It is the only sector combining high wages (417 DKK/hr), momentum, and large-scale employment (369,716 employees).
 
-- **Financial & Insurance commands the highest hourly wages** (539 
-  DKK/hr) while maintaining Denmark's smallest major industry workforce 
-  (90,420 employees) — the clearest example of high-skill labor 
-  concentration in the Danish economy.
+- **Tech Hiring is a Quality Game:** 
+While Information & Communication offers high compensation (457 DKK/hr), payroll growth slowed to 3.38% in 2024 as post-pandemic hiring stabilized, indicating selective, high-value talent retention over headcount expansion.
+
+- **Financial Services Sets the Premium Wage Benchmark:** 
+Commanding the highest hourly rate (539 DKK/hr) alongside 6.93% payroll growth, Financial & Insurance concentrates premium compensation within a compact, highly specialized workforce (90,420 employees).
+
+- **Scale vs. Momentum in the Public Sector:** 
+Public Sector represents the largest total payroll spend (558B DKK in 2024), yet exhibits a flatter long-term growth trajectory (143 index score vs. Manufacturing's 165, relative to 2013 baselines).
 
 ## Data Sources
 
@@ -49,6 +46,6 @@ install.packages(c("danstat", "tidyverse", "knitr", "rmarkdown"))
 Open `Danish_wages_project.Rmd` in RStudio and click Knit. The pipeline 
 pulls fresh data and renders the full analysis automatically.
 
-## Live Report
+## Markdown Report
 
 [View the rendered analysis](https://oliwier-ferenc.github.io/danish-payroll-analysis/)

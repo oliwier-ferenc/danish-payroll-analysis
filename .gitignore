@@ -3,3 +3,6 @@
 .Rproj.user/
 *_cache/
 *_files/
+
+# Local working files
+danish_payroll_data.xlsx

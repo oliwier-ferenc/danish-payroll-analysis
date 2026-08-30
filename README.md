@@ -48,7 +48,7 @@ pulls fresh data and renders the full analysis automatically.
 
 ## Presentation & Report
 
-- [Interactive slide deck]((https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Foliwier-ferenc%2Fdanish-payroll-analysis%2Fmain%2FDanish_Labour_Market_Analysis_2026.pptx))
+- [Interactive slide deck](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Foliwier-ferenc%2Fdanish-payroll-analysis%2Fmain%2FDanish_Labour_Market_Analysis_2026.pptx)
 
 - [Rendered HTML analysis](https://oliwier-ferenc.github.io/danish-payroll-analysis/)
 

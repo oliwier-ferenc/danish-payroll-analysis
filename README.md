@@ -46,6 +46,7 @@ install.packages(c("danstat", "tidyverse", "knitr", "rmarkdown"))
 Open `Danish_wages_project.Rmd` in RStudio and click Knit. The pipeline 
 pulls fresh data and renders the full analysis automatically.
 
-## Markdown Report
+## Presentation & Report
 
-[View the rendered analysis](https://oliwier-ferenc.github.io/danish-payroll-analysis/)
+[Rendered HTML analysis](https://oliwier-ferenc.github.io/danish-payroll-analysis/)
+[Download raw pptx file](./Danish_Labour_Market_Analysis_2026.pptx)
